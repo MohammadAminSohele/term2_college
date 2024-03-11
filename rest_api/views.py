@@ -29,3 +29,10 @@ class show_teachers_info(APIView):
         teachers_query=Teacher.objects.all()
         serializer=Teacher_serializer(instance=teachers_query,many=True)
         return Response(data=serializer.data,status=status.HTTP_200_OK)
+    
+class register_teacher(mixins.CreateModelMixin,generics.GenericAPIView):
+    queryset=Teacher.objects.all()
+    serializer_class=Teacher_serializer
+
+    def post(self,request:Request):
+        return self.create(request)
