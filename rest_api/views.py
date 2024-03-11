@@ -6,8 +6,8 @@ from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework import mixins,generics
 
-from .models import Student
-from .serializer import Student_serializer
+from .models import Student,Teacher
+from .serializer import Student_serializer,Teacher_serializer
 
 # Create your views here.
 
@@ -23,3 +23,9 @@ class register_student(mixins.CreateModelMixin,generics.GenericAPIView):
 
     def post(self,request:Request):
         return self.create(request)
+    
+class show_teachers_info(APIView):
+    def get(self,request:Request):
+        teachers_query=Teacher.objects.all()
+        serializer=Teacher_serializer(instance=teachers_query,many=True)
+        return Response(data=serializer.data,status=status.HTTP_200_OK)
