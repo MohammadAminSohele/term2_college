@@ -16,6 +16,19 @@ class show_students_info(APIView):
         students_query=Student.objects.all()
         serializer=Student_serializer(instance=students_query,many=True)
         return Response(data=serializer.data,status=status.HTTP_200_OK)
+    
+class show_student_info(APIView):
+    def get_object(self,student_id:int):
+        try:
+            selected_student=Student.objects.get(pk=student_id)
+            return selected_student
+        except Student.DoesNotExist:
+            return Response(data=None,status=status.HTTP_404_NOT_FOUND)
+    def get(self, request:Request,student_id:int):
+        selected_student=self.get_object(student_id)
+        serializer=Student_serializer(instance=selected_student)
+        return Response(data=serializer.data,status=status.HTTP_200_OK)
+        
 
 class register_student(mixins.CreateModelMixin,generics.GenericAPIView):
     queryset=Student.objects.all()
