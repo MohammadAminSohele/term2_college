@@ -55,6 +55,13 @@ class register_student(mixins.CreateModelMixin,generics.GenericAPIView):
     def post(self,request:Request):
         return self.create(request)
     
+class delete_student(mixins.DestroyModelMixin,generics.GenericAPIView):
+    queryset=Student.objects.all()
+    serializer_class=Student_serializer
+
+    def delete(self, request:Request,pk):
+        return self.destroy(request)
+    
 class show_teachers_info(APIView):
     def get(self,request:Request):
         teachers_query=Teacher.objects.all()
