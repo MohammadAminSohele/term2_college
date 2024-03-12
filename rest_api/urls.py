@@ -11,5 +11,6 @@ urlpatterns = [
     # teacher
     path('teachers/show',views.show_teachers_info.as_view()),
     path('teacher/register',views.register_teacher.as_view()),
+    path('teacher/delete/<pk>',views.delete_teacher_info.as_view()),
 
 ]
