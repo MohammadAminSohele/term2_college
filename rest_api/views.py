@@ -47,7 +47,27 @@ class edit_student_info(APIView):
             edit.save()
             return Response(data=edit.data,status=status.HTTP_202_ACCEPTED)
         return Response(data=None,status=status.HTTP_400_BAD_REQUEST)
-
+    
+class edit_teacher_info(APIView):
+    def get_object(self,teacher_id):
+        try:
+            selected_teacher=Teacher.objects.get(pk=teacher_id)
+            return selected_teacher
+        except Teacher.DoesNotExist:
+            return Response(data=None,status=status.HTTP_404_NOT_FOUND)
+        
+    def get(self, request:Request,teacher_id):
+        selected_teacher=self.get_object(teacher_id)
+        get_serialize=Teacher_serializer(instance=selected_teacher)
+        return Response(data=get_serialize.data,status=status.HTTP_200_OK)
+    
+    def put(self, request:Request,teacher_id):
+        selected_teacher=self.get_object(teacher_id)
+        edit_serialize=Teacher_serializer(instance=selected_teacher,data=request.data)
+        if edit_serialize.is_valid():
+            edit_serialize.save()
+            return Response(data=edit_serialize.data,status=status.HTTP_202_ACCEPTED)
+        return Response(data=None,status=status.HTTP_400_BAD_REQUEST)
 class register_student(mixins.CreateModelMixin,generics.GenericAPIView):
     queryset=Student.objects.all()
     serializer_class=Student_serializer
