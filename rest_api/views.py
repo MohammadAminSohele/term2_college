@@ -59,6 +59,27 @@ class edit_student_info(APIView):
             edit.save()
             return Response(data=edit.data,status=status.HTTP_202_ACCEPTED)
         return Response(data=None,status=status.HTTP_400_BAD_REQUEST)
+
+
+class edit_StudentTerm_info(APIView):
+    def get_object(self,student_term:int):
+        try:
+            selected_term=StudentTerm.objects.get(pk=student_term)
+            return selected_term
+        except StudentTerm.DoesNotExist:
+            return Response(data=None,status=status.HTTP_400_BAD_REQUEST)
+    def get(self, request:Request,student_term:int):
+        selected_term=self.get_object(student_term)
+        get_serialize=TermStudent_serializer(instance=selected_term)
+        return Response(data=get_serialize.data,status=status.HTTP_200_OK)
+    
+    def put(self, request:Request,student_term:int):
+        selected_term=self.get_object(student_term)
+        put_serialize=TermStudent_serializer(instance=selected_term,data=request.data)
+        if put_serialize.is_valid():
+            put_serialize.save()
+            return Response(data=put_serialize.data,status=status.HTTP_202_ACCEPTED)
+        return Response(data=None,status=status.HTTP_400_BAD_REQUEST)
     
 class edit_teacher_info(APIView):
     def get_object(self,teacher_id):
