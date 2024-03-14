@@ -122,6 +122,13 @@ class delete_student(mixins.DestroyModelMixin,generics.GenericAPIView):
     def delete(self, request:Request,pk):
         return self.destroy(request)
     
+class delete_StudentTerm(mixins.DestroyModelMixin,generics.GenericAPIView):
+    queryset=StudentTerm.objects.all()
+    serializer_class=TermStudent_serializer
+
+    def delete(self, request:Request,pk):
+        return self.destroy(request)
+    
 class show_teachers_info(APIView):
     def get(self,request:Request):
         teachers_query=Teacher.objects.all()

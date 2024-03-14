@@ -12,6 +12,7 @@ urlpatterns = [
     path('student/register/term',views.register_student_term.as_view()),
     path('student/show/term/<int:student_term>',views.show_studentTerm_info.as_view()),
     path('student/edit/term/<int:student_term>',views.edit_StudentTerm_info.as_view()),
+    path('student/delete/term/<pk>',views.delete_StudentTerm.as_view()),
     # teacher
     path('teachers/show',views.show_teachers_info.as_view()),
     path('teacher/register',views.register_teacher.as_view()),
