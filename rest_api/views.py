@@ -6,8 +6,8 @@ from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework import mixins,generics
 
-from .models import Student,Teacher
-from .serializer import Student_serializer,Teacher_serializer
+from .models import Student,Teacher,StudentTerm
+from .serializer import Student_serializer,Teacher_serializer,TermStudent_serializer
 
 # Create your views here.
 
@@ -28,6 +28,18 @@ class show_student_info(APIView):
         selected_student=self.get_object(student_id)
         serializer=Student_serializer(instance=selected_student)
         return Response(data=serializer.data,status=status.HTTP_200_OK)
+    
+class show_studentTerm_info(APIView):
+    def get_object(self,student_term):
+        try:
+            selected_term=StudentTerm.objects.get(pk=student_term)
+            return selected_term
+        except StudentTerm.DoesNotExist:
+            return Response(data=None,status=status.HTTP_404_NOT_FOUND)
+    def get(self, request:Request,student_term):
+        selected_term=self.get_object(student_term)
+        get_serialize=TermStudent_serializer(instance=selected_term)
+        return Response(data=get_serialize.data,status=status.HTTP_200_OK)
     
 class edit_student_info(APIView):
     def get_object(self,student_id:int):
