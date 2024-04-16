@@ -6,7 +6,7 @@ from . import models
 
 
 @admin.register(models.Student)
-class UserAdmin(admin.ModelAdmin):
+class StudentAdmin(admin.ModelAdmin):
     list_display = (
         "mobile",
         "first_name",
@@ -25,8 +25,21 @@ class UserAdmin(admin.ModelAdmin):
     list_per_page = 25
 
 
+@admin.register(models.DegreeOfEducation)
+class DegreeOfEducationAdmin(admin.ModelAdmin):
+    list_display = (
+        "name",
+        "study",
+    )
+    search_fields = (
+        "name",
+        "study",
+    )
+    list_per_page = 25
+
+
 @admin.register(models.Teacher)
-class BlogAdmin(admin.ModelAdmin):
+class TeacherAdmin(admin.ModelAdmin):
     list_display = (
         "mobile",
         "first_name",
@@ -47,7 +60,7 @@ class BlogAdmin(admin.ModelAdmin):
 
 
 @admin.register(models.Level)
-class BlogAdmin(admin.ModelAdmin):
+class LevelAdmin(admin.ModelAdmin):
     list_display = (
         "name",
         "regdate",
@@ -57,7 +70,7 @@ class BlogAdmin(admin.ModelAdmin):
 
 
 @admin.register(models.Course)
-class BlogAdmin(admin.ModelAdmin):
+class CourseAdmin(admin.ModelAdmin):
     list_display = (
         "name",
         "level",
@@ -71,7 +84,7 @@ class BlogAdmin(admin.ModelAdmin):
 
 
 @admin.register(models.Term)
-class BlogAdmin(admin.ModelAdmin):
+class TermAdmin(admin.ModelAdmin):
     list_display = (
         "name",
         "regdate",
@@ -80,7 +93,7 @@ class BlogAdmin(admin.ModelAdmin):
 
 
 @admin.register(models.StudentTerm)
-class BlogAdmin(admin.ModelAdmin):
+class StudentTermAdmin(admin.ModelAdmin):
     list_display = (
         "student",
         "course",
