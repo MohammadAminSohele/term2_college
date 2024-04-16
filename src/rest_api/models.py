@@ -6,13 +6,14 @@ from django.db import models
 
 class Student(models.Model):
     nat_code = models.CharField(
-        max_length=150, verbose_name=_("Student's national code")
+        max_length=10, verbose_name=_("Student's national code"),
+        blank=False, null=False,
     )
     first_name = models.CharField(max_length=150, verbose_name=_("ّStudent's name"))
     last_name = models.CharField(max_length=150, verbose_name=_("Student's last name"))
     birthday_date = models.DateField(verbose_name=_("Date of birth"))
-    telephone = models.CharField(max_length=150, verbose_name=_("landline number"))
-    mobile = models.CharField(max_length=150, verbose_name=_("Phone number"))
+    telephone = models.CharField(max_length=11, verbose_name=_("landline number"))
+    mobile = models.CharField(max_length=11, verbose_name=_("Phone number"))
     email = models.EmailField(verbose_name=_("Email"))
     score = models.IntegerField(verbose_name=_("Score"))
     regdate = models.DateField(verbose_name=_("Date of Registration"))
@@ -27,17 +28,38 @@ class Student(models.Model):
         verbose_name_plural = _("Students")
 
 
+class DegreeOfEducation(models.Model):
+    name = models.TextField(
+        max_length=200, verbose_name=_("Name of degree"),
+        blank=False, null=False,
+    )
+    study = models.TextField(
+        max_length=200, verbose_name=_("Field of Study"),
+        blank=False, null=False,
+    )
+
+    def __str__(self):
+        return self.name
+    
+    class Meta:
+        verbose_name = _("DegreeOfEducation")
+        verbose_name_plural = _("DegreeOfEducations")
+
+
 class Teacher(models.Model):
     nat_code = models.CharField(
-        max_length=150, verbose_name=_("Teacher's national code")
+        max_length=10, verbose_name=_("Teacher's national code")
     )
     first_name = models.CharField(max_length=150, verbose_name=_("Teacher's name"))
     last_name = models.CharField(max_length=150, verbose_name=_("Teacher's last name"))
     birthday_date = models.DateField(verbose_name=_("Date of birth"))
-    telephone = models.CharField(max_length=150, verbose_name=_("landline number"))
-    mobile = models.CharField(max_length=150, verbose_name=_("Phone number"))
+    telephone = models.CharField(max_length=11, verbose_name=_("landline number"))
+    mobile = models.CharField(max_length=11, verbose_name=_("Phone number"))
     email = models.EmailField(verbose_name=_("Email"))
-    field = models.CharField(max_length=150, verbose_name=_("Field of Study"))
+    field = models.ForeignKey(
+        DegreeOfEducation, on_delete=models.CASCADE,
+        verbose_name=_("Degree Of Education"),
+    )
     regdate = models.DateField(verbose_name=_("Date of Registration"))
     description = models.TextField(verbose_name=_("Description"))
 
@@ -65,8 +87,14 @@ class Level(models.Model):
 
 class Course(models.Model):
     name = models.CharField(max_length=150, verbose_name=_("Name of Course"))
+    teacher = models.ForeignKey(
+        Teacher, on_delete=models.CASCADE,
+        null=False, default=None,
+        verbose_name=_("Teacher"), related_name="courses",
+    )
     level = models.ForeignKey(
-        Level, on_delete=models.CASCADE, verbose_name=_("Section")
+        Level, on_delete=models.CASCADE, 
+        verbose_name=_("Section"), null=False,
     )
     regdate = models.DateField(verbose_name=_("Date of Registration"))
     description = models.TextField(verbose_name=_("Description"))
