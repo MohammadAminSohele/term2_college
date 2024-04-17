@@ -1,0 +1,167 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-04-16 23:47+0330\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: .\rest_api\models.py:9
+msgid "Student's national code"
+msgstr "کد ملی دانشجو"
+
+#: .\rest_api\models.py:12
+msgid "ّStudent's name"
+msgstr "نام دانشجو"
+
+#: .\rest_api\models.py:13
+msgid "Student's last name"
+msgstr "نام خانوادگی دانشجو"
+
+#: .\rest_api\models.py:14 .\rest_api\models.py:55
+msgid "Date of birth"
+msgstr "تاریخ تولد"
+
+#: .\rest_api\models.py:15 .\rest_api\models.py:56
+msgid "landline number"
+msgstr "شماره ثابت"
+
+#: .\rest_api\models.py:16 .\rest_api\models.py:57
+msgid "Phone number"
+msgstr "شماره موبایل"
+
+#: .\rest_api\models.py:17 .\rest_api\models.py:58
+msgid "Email"
+msgstr "ایمیل"
+
+#: .\rest_api\models.py:18
+msgid "Score"
+msgstr "نمره دانشجو"
+
+#: .\rest_api\models.py:19 .\rest_api\models.py:63 .\rest_api\models.py:76
+#: .\rest_api\models.py:99 .\rest_api\models.py:115 .\rest_api\models.py:134
+msgid "Date of Registration"
+msgstr "تاریخ ثبت"
+
+#: .\rest_api\models.py:20 .\rest_api\models.py:64 .\rest_api\models.py:77
+#: .\rest_api\models.py:100 .\rest_api\models.py:116 .\rest_api\models.py:135
+msgid "Description"
+msgstr "توضیحات"
+
+#: .\rest_api\models.py:27 .\rest_api\models.py:128
+msgid "Student"
+msgstr "دانشجو"
+
+#: .\rest_api\models.py:28
+msgid "Students"
+msgstr "دانشجوها"
+
+#: .\rest_api\models.py:33
+#, fuzzy
+#| msgid "Name of Course"
+msgid "Name of degree"
+msgstr "نام درس"
+
+#: .\rest_api\models.py:37
+msgid "Field of Study"
+msgstr "رشته تحصیلی"
+
+#: .\rest_api\models.py:45
+msgid "DegreeOfEducation"
+msgstr "مدرک تحصیلی"
+
+#: .\rest_api\models.py:46
+msgid "DegreeOfEducations"
+msgstr "مدرک تحصیلی"
+
+#: .\rest_api\models.py:51
+msgid "Teacher's national code"
+msgstr "کدم ملی استاد"
+
+#: .\rest_api\models.py:53
+msgid "Teacher's name"
+msgstr "نام استاد"
+
+#: .\rest_api\models.py:54
+msgid "Teacher's last name"
+msgstr "نام خانوادگی استاد"
+
+#: .\rest_api\models.py:61
+msgid "Degree Of Education"
+msgstr "مدرک تحصیلی"
+
+#: .\rest_api\models.py:70 .\rest_api\models.py:93
+msgid "Teacher"
+msgstr "استاد"
+
+#: .\rest_api\models.py:71
+msgid "Teachers"
+msgstr "استادها"
+
+#: .\rest_api\models.py:75
+msgid "Section name"
+msgstr "نام ترم"
+
+#: .\rest_api\models.py:84
+msgid "Level"
+msgstr "مقطع"
+
+#: .\rest_api\models.py:85
+msgid "Levels"
+msgstr "مقطع ها"
+
+#: .\rest_api\models.py:89
+msgid "Name of Course"
+msgstr "نام درس"
+
+#: .\rest_api\models.py:97
+msgid "Section"
+msgstr "مقطع"
+
+#: .\rest_api\models.py:107 .\rest_api\models.py:131
+msgid "Course"
+msgstr "درس"
+
+#: .\rest_api\models.py:108
+msgid "Courses"
+msgstr "درس ها"
+
+#: .\rest_api\models.py:112
+msgid "Term name"
+msgstr "نام ترم"
+
+#: .\rest_api\models.py:113
+msgid "Start date"
+msgstr "تاریخ شروع"
+
+#: .\rest_api\models.py:114
+msgid "End date"
+msgstr "تاریخ پایان"
+
+#: .\rest_api\models.py:122 .\rest_api\models.py:133
+msgid "Term"
+msgstr "ترم"
+
+#: .\rest_api\models.py:123
+msgid "Terms"
+msgstr "ترم ها"
+
+#: .\rest_api\models.py:141
+msgid "Student Term"
+msgstr "ترم دانشجو"
+
+#: .\rest_api\models.py:142
+msgid "Student Terms"
+msgstr "ترم دانشجو ها"
