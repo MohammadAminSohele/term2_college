@@ -130,6 +130,8 @@ REST_FRAMEWORK = {
         'rest_framework.filters.SearchFilter',
         'rest_framework.filters.OrderingFilter',
     ],
+    'DEFAULT_PAGINATION_CLASS': 'config.utils.custom_pagination.CustomPagination',
+    'PAGE_SIZE': 25,
 }
 
 # Static files (CSS, JavaScript, Images)
