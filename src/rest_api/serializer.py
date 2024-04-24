@@ -3,7 +3,14 @@ from rest_framework import serializers
 from .import models
 
 
-class Student_serializer(serializers.ModelSerializer):
+class StudentSerializer(serializers.ModelSerializer):
+    user = serializers.SerializerMethodField(method_name='get_user')
+
+    def get_user(self, obj):
+        return {
+            "username": obj.user.username,
+        }
+    
     class Meta:
         model = models.Student
         fields = '__all__'
@@ -16,14 +23,14 @@ class StudentTermSerializer(serializers.ModelSerializer):
 
     def get_student(self, obj):
         return {
-            "first_name": obj.student.first_name,
-            "last_name": obj.student.last_name,
+            "first_name": obj.student.user.first_name,
+            "last_name": obj.student.user.last_name,
         }
 
     def get_course(self, obj):
         return {
             "name": obj.course.name,
-            "teacher": obj.course.teacher.last_name,
+            "teacher": obj.course.teacher.user.last_name,
             "level": obj.course.level.name,
         }
     
@@ -38,15 +45,31 @@ class StudentTermSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class Teacher_serializer(serializers.ModelSerializer):
+class StudentTermRegisterSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.StudentTerm
+        exclude = [
+            "student",
+        ]
+
+
+class TeacherSerializer(serializers.ModelSerializer):
     field = serializers.SerializerMethodField(method_name='get_field')
 
     def get_field(self, obj):
         return {
-            "first_name": obj.field.name,
-            "last_name": obj.field.study,
+            "name": obj.field.name,
+            "study": obj.field.study,
         }
 
     class Meta:
         model = models.Teacher
         fields = '__all__'
+
+
+class TeacherRegisterEditSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Teacher
+        exclude = [
+            "user",
+        ]
