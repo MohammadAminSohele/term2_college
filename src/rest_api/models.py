@@ -1,29 +1,34 @@
+from django.core.validators import RegexValidator
 from django.utils.translation import gettext as _
+from django.contrib.auth import get_user_model
 from django.db import models
 
 # Create your models here.
 
 
 class Student(models.Model):
+    user = models.ForeignKey(
+        get_user_model(), blank=False,
+        on_delete=models.CASCADE, verbose_name=_("User"),
+    )
     nat_code = models.CharField(
         max_length=10, verbose_name=_("Student's national code"),
         blank=False, null=False,
     )
-    first_name = models.CharField(max_length=150, verbose_name=_("ّStudent's name"))
-    last_name = models.CharField(max_length=150, verbose_name=_("Student's last name"))
     birthday_date = models.DateField(verbose_name=_("Date of birth"))
     telephone = models.CharField(max_length=11, verbose_name=_("landline number"))
-    mobile = models.CharField(max_length=11, verbose_name=_("Phone number"))
-    email = models.EmailField(verbose_name=_("Email"))
-    score = models.IntegerField(verbose_name=_("Score"))
+    mobile_regex = RegexValidator(
+        regex=r"^09\d{2}\s*?\d{3}\s*?\d{4}$", message=_("Invalid phone number."),
+    )
+    mobile = models.CharField(max_length=11, verbose_name=_("Phone number"), validators=[mobile_regex], )
     regdate = models.DateField(verbose_name=_("Date of Registration"))
     description = models.TextField(verbose_name=_("Description"))
 
     def __str__(self):
-        return self.last_name
+        return f"{self.user.last_name} - {self.user.first_name}"
 
     class Meta:
-        ordering = ["first_name", "regdate"]
+        ordering = ["user__first_name", "regdate"]
         verbose_name = _("Student")
         verbose_name_plural = _("Students")
 
@@ -39,7 +44,7 @@ class DegreeOfEducation(models.Model):
     )
 
     def __str__(self):
-        return self.name
+        return f"{self.name}-{self.study}"
     
     class Meta:
         verbose_name = _("DegreeOfEducation")
@@ -47,15 +52,19 @@ class DegreeOfEducation(models.Model):
 
 
 class Teacher(models.Model):
+    user = models.ForeignKey(
+        get_user_model(), blank=False,
+        on_delete=models.CASCADE, verbose_name=_("User"),
+    )
     nat_code = models.CharField(
         max_length=10, verbose_name=_("Teacher's national code")
     )
-    first_name = models.CharField(max_length=150, verbose_name=_("Teacher's name"))
-    last_name = models.CharField(max_length=150, verbose_name=_("Teacher's last name"))
     birthday_date = models.DateField(verbose_name=_("Date of birth"))
     telephone = models.CharField(max_length=11, verbose_name=_("landline number"))
+    mobile_regex = RegexValidator(
+        regex=r"^09\d{2}\s*?\d{3}\s*?\d{4}$", message=_("Invalid phone number."),
+    )
     mobile = models.CharField(max_length=11, verbose_name=_("Phone number"))
-    email = models.EmailField(verbose_name=_("Email"))
     field = models.ForeignKey(
         DegreeOfEducation, on_delete=models.CASCADE,
         verbose_name=_("Degree Of Education"),
@@ -64,7 +73,7 @@ class Teacher(models.Model):
     description = models.TextField(verbose_name=_("Description"))
 
     def __str__(self):
-        return self.last_name
+        return self.user.last_name
 
     class Meta:
         verbose_name = _("Teacher")
@@ -100,7 +109,7 @@ class Course(models.Model):
     description = models.TextField(verbose_name=_("Description"))
 
     def __str__(self):
-        return self.name
+        return f"{self.name} - {self.teacher.user.first_name}-{self.teacher.user.last_name}"
 
     class Meta:
         ordering = ["level"]
@@ -135,7 +144,7 @@ class StudentTerm(models.Model):
     description = models.TextField(verbose_name=_("Description"))
 
     def __str__(self):
-        return self.student.last_name
+        return self.student.user.last_name
 
     class Meta:
         verbose_name = _("Student Term")
