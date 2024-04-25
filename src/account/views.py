@@ -68,7 +68,7 @@ class UserRegister(APIView):
     post:
         Creates a new user instance.
 
-        parameters: [username, password, confirm_password, email]
+        parameters: [username, password, confirm_password, first_name, last_name, email]
     """
 
     throttle_scope = "authentication"
@@ -101,6 +101,8 @@ class UserRegister(APIView):
             get_user_model().objects.create(
                 username=serializer.data.get("username"),
                 password=serializer.data.get("password"),
+                first_name=serializer.data.get("first_name"),
+                last_name=serializer.data.get("last_name"),
                 email=serializer.data.get("email"),
             )
             
