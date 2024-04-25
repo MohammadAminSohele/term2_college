@@ -135,6 +135,9 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
+    'DEFAULT_THROTTLE_RATES': {
+        "authentication": "8/hour",
+    },
     'DEFAULT_PAGINATION_CLASS': 'config.utils.custom_pagination.CustomPagination',
     'PAGE_SIZE': 25,
 }
