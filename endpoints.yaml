@@ -1,0 +1,909 @@
+openapi: 3.0.3
+info:
+  title: Term2 College
+  version: '1.0'
+  description: a simple university project for the student semester
+paths:
+  /account/api/token/refresh/:
+    post:
+      operationId: account_api_token_refresh_create
+      description: |-
+        Takes a refresh type JSON web token and returns an access type JSON web
+        token if the refresh token is valid.
+      tags:
+      - account
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenRefresh'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TokenRefresh'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TokenRefresh'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenRefresh'
+          description: ''
+  /account/api/token/verify/:
+    post:
+      operationId: account_api_token_verify_create
+      description: |-
+        Takes a token and indicates if it is valid.  This view provides no
+        information about a token's fitness for a particular use.
+      tags:
+      - account
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenVerify'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TokenVerify'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TokenVerify'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenVerify'
+          description: ''
+  /account/login/:
+    post:
+      operationId: account_login_create
+      description: |-
+        post:
+            login a user instance.
+
+            parameters: [username, password]
+      tags:
+      - account
+      security:
+      - cookieAuth: []
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          description: No response body
+  /account/register/:
+    post:
+      operationId: account_register_create
+      description: |-
+        post:
+            Creates a new user instance.
+
+            parameters: [username, password, confirm_password, first_name, last_name, email]
+      tags:
+      - account
+      security:
+      - cookieAuth: []
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          description: No response body
+  /api/schema/:
+    get:
+      operationId: api_schema_retrieve
+      description: |-
+        OpenApi3 schema for this API. Format can be selected via content negotiation.
+
+        - YAML: application/vnd.oai.openapi
+        - JSON: application/vnd.oai.openapi+json
+      parameters:
+      - in: query
+        name: format
+        schema:
+          type: string
+          enum:
+          - json
+          - yaml
+      - in: query
+        name: lang
+        schema:
+          type: string
+          enum:
+          - af
+          - ar
+          - ar-dz
+          - ast
+          - az
+          - be
+          - bg
+          - bn
+          - br
+          - bs
+          - ca
+          - ckb
+          - cs
+          - cy
+          - da
+          - de
+          - dsb
+          - el
+          - en
+          - en-au
+          - en-gb
+          - eo
+          - es
+          - es-ar
+          - es-co
+          - es-mx
+          - es-ni
+          - es-ve
+          - et
+          - eu
+          - fa
+          - fi
+          - fr
+          - fy
+          - ga
+          - gd
+          - gl
+          - he
+          - hi
+          - hr
+          - hsb
+          - hu
+          - hy
+          - ia
+          - id
+          - ig
+          - io
+          - is
+          - it
+          - ja
+          - ka
+          - kab
+          - kk
+          - km
+          - kn
+          - ko
+          - ky
+          - lb
+          - lt
+          - lv
+          - mk
+          - ml
+          - mn
+          - mr
+          - ms
+          - my
+          - nb
+          - ne
+          - nl
+          - nn
+          - os
+          - pa
+          - pl
+          - pt
+          - pt-br
+          - ro
+          - ru
+          - sk
+          - sl
+          - sq
+          - sr
+          - sr-latn
+          - sv
+          - sw
+          - ta
+          - te
+          - tg
+          - th
+          - tk
+          - tr
+          - tt
+          - udm
+          - ug
+          - uk
+          - ur
+          - uz
+          - vi
+          - zh-hans
+          - zh-hant
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/vnd.oai.openapi:
+              schema:
+                type: object
+                additionalProperties: {}
+            application/yaml:
+              schema:
+                type: object
+                additionalProperties: {}
+            application/vnd.oai.openapi+json:
+              schema:
+                type: object
+                additionalProperties: {}
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
+  /student/delete/{id}:
+    delete:
+      operationId: student_delete_destroy
+      description: |-
+        delete:
+            Delete an existing student. search student for delete with pk.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Student.
+        required: true
+      tags:
+      - student
+      security:
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /student/delete/term/{id}:
+    delete:
+      operationId: student_delete_term_destroy
+      description: |-
+        delete:
+            Delete an existing student term. search student term with pk.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Student Term.
+        required: true
+      tags:
+      - student
+      security:
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /student/edit/{student_id}:
+    get:
+      operationId: student_edit_retrieve
+      description: |-
+        get:
+            Returns the details of a student instance. Searches student using pk field.
+
+        put:
+            Updates an existing student. Returns updated student data.
+
+            parameters: exclude = [user]
+      parameters:
+      - in: path
+        name: student_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - student
+      security:
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+    put:
+      operationId: student_edit_update
+      description: |-
+        get:
+            Returns the details of a student instance. Searches student using pk field.
+
+        put:
+            Updates an existing student. Returns updated student data.
+
+            parameters: exclude = [user]
+      parameters:
+      - in: path
+        name: student_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - student
+      security:
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /student/register:
+    post:
+      operationId: student_register_create
+      description: |-
+        post:
+            Creates a new student instance.
+
+            parameters: exclude = [user]
+      tags:
+      - student
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Student'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Student'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Student'
+        required: true
+      security:
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Student'
+          description: ''
+  /student/register/term:
+    post:
+      operationId: student_register_term_create
+      description: |-
+        post:
+            Creates a new student term instance. Returns student term data.
+
+            parameters: exclude = [student]
+      tags:
+      - student
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StudentTermRegister'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/StudentTermRegister'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/StudentTermRegister'
+        required: true
+      security:
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StudentTermRegister'
+          description: ''
+  /student/show/{id}:
+    get:
+      operationId: student_show_retrieve
+      description: |-
+        get:
+            Returns the details of a student instance. Searches student using pk field.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - student
+      security:
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Student'
+          description: ''
+  /student/show/term/{student_id}/{term_id}:
+    get:
+      operationId: student_show_term_retrieve
+      description: |-
+        get:
+            Returns a list of student terms.
+      parameters:
+      - in: path
+        name: student_id
+        schema:
+          type: integer
+        required: true
+      - in: path
+        name: term_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - student
+      security:
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /students/show:
+    get:
+      operationId: students_show_list
+      description: |-
+        get:
+            Returns all existing students.
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - in: query
+        name: regdate
+        schema:
+          type: string
+          format: date
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - students
+      security:
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedStudentList'
+          description: ''
+  /teacher/delete/{id}:
+    delete:
+      operationId: teacher_delete_destroy
+      description: |-
+        delete:
+            Delete an existing teacher.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Teacher.
+        required: true
+      tags:
+      - teacher
+      security:
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /teacher/edit/{id}:
+    put:
+      operationId: teacher_edit_update
+      description: |-
+        put:
+            Updates an existing teacher. Returns updated teacher data.
+
+            parameters: exclude = [user]
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - teacher
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TeacherRegisterEdit'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TeacherRegisterEdit'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TeacherRegisterEdit'
+        required: true
+      security:
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TeacherRegisterEdit'
+          description: ''
+    patch:
+      operationId: teacher_edit_partial_update
+      description: |-
+        put:
+            Updates an existing teacher. Returns updated teacher data.
+
+            parameters: exclude = [user]
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - teacher
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedTeacherRegisterEdit'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedTeacherRegisterEdit'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedTeacherRegisterEdit'
+      security:
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TeacherRegisterEdit'
+          description: ''
+  /teacher/register:
+    post:
+      operationId: teacher_register_create
+      description: |-
+        post:
+            Creates a new user instance.
+
+            parameters: exclude = [user]
+      tags:
+      - teacher
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TeacherRegisterEdit'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TeacherRegisterEdit'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TeacherRegisterEdit'
+        required: true
+      security:
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TeacherRegisterEdit'
+          description: ''
+  /teachers/show:
+    get:
+      operationId: teachers_show_list
+      description: |-
+        get:
+            Returns all existing teachers.
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - in: query
+        name: regdate
+        schema:
+          type: string
+          format: date
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - teachers
+      security:
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedTeacherList'
+          description: ''
+components:
+  schemas:
+    PaginatedStudentList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Student'
+    PaginatedTeacherList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Teacher'
+    PatchedTeacherRegisterEdit:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        nat_code:
+          type: string
+          title: Teacher's national code
+          maxLength: 10
+        birthday_date:
+          type: string
+          format: date
+          title: Date of birth
+        telephone:
+          type: string
+          title: Landline number
+          maxLength: 11
+        mobile:
+          type: string
+          title: Phone number
+          maxLength: 11
+        regdate:
+          type: string
+          format: date
+          title: Date of Registration
+        description:
+          type: string
+        field:
+          type: integer
+          title: Degree Of Education
+    Student:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        user:
+          type: string
+          readOnly: true
+        nat_code:
+          type: string
+          title: Student's national code
+          maxLength: 10
+        birthday_date:
+          type: string
+          format: date
+          title: Date of birth
+        telephone:
+          type: string
+          title: Landline number
+          maxLength: 11
+        mobile:
+          type: string
+          title: Phone number
+          pattern: ^09\d{2}\s*?\d{3}\s*?\d{4}$
+          maxLength: 11
+        regdate:
+          type: string
+          format: date
+          title: Date of Registration
+        description:
+          type: string
+      required:
+      - birthday_date
+      - description
+      - id
+      - mobile
+      - nat_code
+      - regdate
+      - telephone
+      - user
+    StudentTermRegister:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        regdate:
+          type: string
+          format: date
+          title: Date of Registration
+        description:
+          type: string
+        course:
+          type: integer
+        term:
+          type: integer
+      required:
+      - course
+      - description
+      - id
+      - regdate
+      - term
+    Teacher:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        field:
+          type: string
+          readOnly: true
+        nat_code:
+          type: string
+          title: Teacher's national code
+          maxLength: 10
+        birthday_date:
+          type: string
+          format: date
+          title: Date of birth
+        telephone:
+          type: string
+          title: Landline number
+          maxLength: 11
+        mobile:
+          type: string
+          title: Phone number
+          maxLength: 11
+        regdate:
+          type: string
+          format: date
+          title: Date of Registration
+        description:
+          type: string
+        user:
+          type: integer
+      required:
+      - birthday_date
+      - description
+      - field
+      - id
+      - mobile
+      - nat_code
+      - regdate
+      - telephone
+      - user
+    TeacherRegisterEdit:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        nat_code:
+          type: string
+          title: Teacher's national code
+          maxLength: 10
+        birthday_date:
+          type: string
+          format: date
+          title: Date of birth
+        telephone:
+          type: string
+          title: Landline number
+          maxLength: 11
+        mobile:
+          type: string
+          title: Phone number
+          maxLength: 11
+        regdate:
+          type: string
+          format: date
+          title: Date of Registration
+        description:
+          type: string
+        field:
+          type: integer
+          title: Degree Of Education
+      required:
+      - birthday_date
+      - description
+      - field
+      - id
+      - mobile
+      - nat_code
+      - regdate
+      - telephone
+    TokenRefresh:
+      type: object
+      properties:
+        access:
+          type: string
+          readOnly: true
+        refresh:
+          type: string
+          writeOnly: true
+      required:
+      - access
+      - refresh
+    TokenVerify:
+      type: object
+      properties:
+        token:
+          type: string
+          writeOnly: true
+      required:
+      - token
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: sessionid
+    jwtAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
