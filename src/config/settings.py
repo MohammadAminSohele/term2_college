@@ -44,6 +44,8 @@ INSTALLED_APPS = [
     # install app
     'rest_framework',
     'django_filters',
+    'drf_spectacular',
+    'drf_spectacular_sidecar',
 ]
 
 MIDDLEWARE = [
@@ -135,8 +137,22 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
+    'DEFAULT_THROTTLE_RATES': {
+        "authentication": "8/hour",
+    },
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
     'DEFAULT_PAGINATION_CLASS': 'config.utils.custom_pagination.CustomPagination',
     'PAGE_SIZE': 25,
+}
+
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Term2 College',
+    'DESCRIPTION': 'a simple university project for the student semester',
+    'VERSION': '1.0',
+    'SWAGGER_UI_DIST': 'SIDECAR',
+    'SWAGGER_UI_FAVICON_HREF': 'SIDECAR',
+    'REDOC_DIST': 'SIDECAR',
 }
 
 # Static files (CSS, JavaScript, Images)

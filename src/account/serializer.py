@@ -29,6 +29,14 @@ class UserRegisterSerializer(UserLoginSerializer):
 
         return data
     
+    first_name = serializers.CharField(
+        max_length=50,
+    )
+
+    last_name = serializers.CharField(
+        max_length=50,
+    )
+
     email = serializers.CharField(
         max_length=200,
     )

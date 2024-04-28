@@ -30,6 +30,10 @@ from permissions import (
 # Create your views here.
 
 class show_students_info(ListAPIView):
+    """
+    get:
+        Returns all existing students.
+    """
 
     permission_classes = [
         IsAdminUser,
@@ -55,6 +59,10 @@ class show_students_info(ListAPIView):
 
 
 class show_student_info(RetrieveAPIView):
+    """
+    get:
+        Returns the details of a student instance. Searches student using pk field.
+    """
 
     serializer_class = StudentSerializer
     permission_classes = [
@@ -67,6 +75,15 @@ class show_student_info(RetrieveAPIView):
 
 
 class edit_student_info(APIView):
+    """
+    get:
+        Returns the details of a student instance. Searches student using pk field.
+
+    put:
+        Updates an existing student. Returns updated student data.
+
+        parameters: exclude = [user]
+    """
 
     permission_classes = [
         IsAdminUser,
@@ -92,6 +109,11 @@ class edit_student_info(APIView):
 
 
 class delete_student(mixins.DestroyModelMixin, generics.GenericAPIView):
+    """
+    delete:
+        Delete an existing student. search student for delete with pk.
+    """
+
     permission_classes = [
         IsSuperUser,
     ]
@@ -104,6 +126,13 @@ class delete_student(mixins.DestroyModelMixin, generics.GenericAPIView):
 
 
 class register_student(mixins.CreateModelMixin, generics.GenericAPIView):
+    """
+    post:
+        Creates a new student instance.
+
+        parameters: exclude = [user]
+    """
+
     permission_classes = [
         IsAuthenticated,
     ]
@@ -120,6 +149,10 @@ class register_student(mixins.CreateModelMixin, generics.GenericAPIView):
 
 
 class show_studentTerm_info(APIView):
+    """
+    get:
+        Returns a list of student terms.
+    """
 
     permission_classes = [
         IsAuthenticated,
@@ -160,6 +193,11 @@ class show_studentTerm_info(APIView):
 
 
 class delete_StudentTerm(mixins.DestroyModelMixin, generics.GenericAPIView):
+    """
+    delete:
+        Delete an existing student term. search student term with pk.
+    """
+
     permission_classes = [
         IsSuperuserOrStudentUser,
     ]
@@ -171,6 +209,13 @@ class delete_StudentTerm(mixins.DestroyModelMixin, generics.GenericAPIView):
 
 
 class register_student_term(mixins.CreateModelMixin, generics.GenericAPIView):
+    """
+    post:
+        Creates a new student term instance. Returns student term data.
+
+        parameters: exclude = [student]
+    """
+
     permission_classes = [
         IsSuperuserOrStudentUser,
     ]
@@ -188,6 +233,10 @@ class register_student_term(mixins.CreateModelMixin, generics.GenericAPIView):
 
 
 class show_teachers_info(ListAPIView):
+    """
+    get:
+        Returns all existing teachers.
+    """
 
     permission_classes = [
         IsAdminUser,
@@ -213,7 +262,13 @@ class show_teachers_info(ListAPIView):
 
 
 class register_teacher(mixins.CreateModelMixin, generics.GenericAPIView):
-    
+    """
+    post:
+        Creates a new user instance.
+
+        parameters: exclude = [user]
+    """
+
     permission_classes = [
         IsAuthenticated,
     ]
@@ -230,6 +285,11 @@ class register_teacher(mixins.CreateModelMixin, generics.GenericAPIView):
 
 
 class delete_teacher_info(mixins.DestroyModelMixin, generics.GenericAPIView):
+    """
+    delete:
+        Delete an existing teacher.
+    """
+
     permission_classes = [
         IsSuperUser,
     ]
@@ -241,7 +301,12 @@ class delete_teacher_info(mixins.DestroyModelMixin, generics.GenericAPIView):
 
 
 class edit_teacher_info(UpdateAPIView):
+    """
+    put:
+        Updates an existing teacher. Returns updated teacher data.
 
+        parameters: exclude = [user]
+    """
     serializer_class = TeacherRegisterEditSerializer
     permission_classes = [
         IsAdminUserOrUser,

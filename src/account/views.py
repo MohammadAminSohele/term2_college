@@ -2,6 +2,7 @@ from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
 from django.contrib.auth import get_user_model
 
+from rest_framework.throttling import ScopedRateThrottle
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
@@ -23,6 +24,11 @@ class UserLogin(APIView):
         parameters: [username, password]
     """
     
+    throttle_scope = "authentication"
+    throttle_classes = [
+        ScopedRateThrottle,
+    ]
+
     def post(self, request):
         serializer = UserLoginSerializer(data=request.data)
 
@@ -62,9 +68,14 @@ class UserRegister(APIView):
     post:
         Creates a new user instance.
 
-        parameters: [username, password, confirm_password, email]
+        parameters: [username, password, confirm_password, first_name, last_name, email]
     """
 
+    throttle_scope = "authentication"
+    throttle_classes = [
+        ScopedRateThrottle,
+    ]
+    
     def post(self, request):
         serializer = UserRegisterSerializer(data=request.data)
 
@@ -90,6 +101,8 @@ class UserRegister(APIView):
             get_user_model().objects.create(
                 username=serializer.data.get("username"),
                 password=serializer.data.get("password"),
+                first_name=serializer.data.get("first_name"),
+                last_name=serializer.data.get("last_name"),
                 email=serializer.data.get("email"),
             )
             
