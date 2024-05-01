@@ -73,3 +73,26 @@ class TeacherRegisterEditSerializer(serializers.ModelSerializer):
         exclude = [
             "user",
         ]
+
+class TeacherDegreeOfEducationSerializer(serializers.ModelSerializer):
+    user = serializers.SerializerMethodField(method_name='get_user')
+
+    def get_user(self, obj):
+        return {
+            "first name": obj.user.first_name,
+            "last name": obj.user.last_name,
+        }
+    
+    field = serializers.SerializerMethodField(method_name='get_field')
+
+    def get_field(self, obj):
+        return {
+            "name": obj.field.name,
+            "study": obj.field.study,
+        }
+
+    class Meta:
+        model = models.Teacher
+        fields = [
+            "user", "field",
+        ]
