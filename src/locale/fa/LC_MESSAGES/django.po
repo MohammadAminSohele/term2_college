@@ -59,16 +59,16 @@ msgid "Phone number"
 msgstr "شماره موبایل"
 
 #: .\rest_api\models.py:24 .\rest_api\models.py:72 .\rest_api\models.py:85
-#: .\rest_api\models.py:108 .\rest_api\models.py:124 .\rest_api\models.py:143
+#: .\rest_api\models.py:111 .\rest_api\models.py:127 .\rest_api\models.py:156
 msgid "Date of Registration"
 msgstr "تاریخ ثبت"
 
 #: .\rest_api\models.py:25 .\rest_api\models.py:73 .\rest_api\models.py:86
-#: .\rest_api\models.py:109 .\rest_api\models.py:125 .\rest_api\models.py:144
+#: .\rest_api\models.py:112 .\rest_api\models.py:128 .\rest_api\models.py:157
 msgid "Description"
 msgstr "توضیحات"
 
-#: .\rest_api\models.py:32 .\rest_api\models.py:137
+#: .\rest_api\models.py:32 .\rest_api\models.py:146
 msgid "Student"
 msgstr "دانشجو"
 
@@ -128,39 +128,51 @@ msgstr "نام درس"
 msgid "Section"
 msgstr "مقطع"
 
-#: .\rest_api\models.py:116 .\rest_api\models.py:140
+#: .\rest_api\models.py:109
+msgid "unit"
+msgstr "تعداد واحد"
+
+#: .\rest_api\models.py:119 .\rest_api\models.py:149
 msgid "Course"
 msgstr "درس"
 
-#: .\rest_api\models.py:117
+#: .\rest_api\models.py:120
 msgid "Courses"
 msgstr "درس ها"
 
-#: .\rest_api\models.py:121
+#: .\rest_api\models.py:124
 msgid "Term name"
 msgstr "نام ترم"
 
-#: .\rest_api\models.py:122
+#: .\rest_api\models.py:125
 msgid "Start date"
 msgstr "تاریخ شروع"
 
-#: .\rest_api\models.py:123
+#: .\rest_api\models.py:126
 msgid "End date"
 msgstr "تاریخ پایان"
 
-#: .\rest_api\models.py:131 .\rest_api\models.py:142
+#: .\rest_api\models.py:134 .\rest_api\models.py:151
 msgid "Term"
 msgstr "ترم"
 
-#: .\rest_api\models.py:132
+#: .\rest_api\models.py:135
 msgid "Terms"
 msgstr "ترم ها"
 
-#: .\rest_api\models.py:150
+#: .\rest_api\models.py:140
+msgid "The grade must be less than or equal to 20"
+msgstr "نمره وارد شده باید کمتر یا مساوی 20 باشد"
+
+#: .\rest_api\models.py:154
+msgid "student grade"
+msgstr "نمره دانشجو"
+
+#: .\rest_api\models.py:163
 msgid "Student Term"
 msgstr "ترم دانشجو"
 
-#: .\rest_api\models.py:151
+#: .\rest_api\models.py:164
 msgid "Student Terms"
 msgstr "ترم دانشجو ها"
 
