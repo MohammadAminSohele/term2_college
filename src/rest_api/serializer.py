@@ -49,7 +49,7 @@ class StudentTermRegisterSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.StudentTerm
         exclude = [
-            "student",
+            "student", "grade",
         ]
 
 
