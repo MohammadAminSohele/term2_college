@@ -159,10 +159,9 @@ class show_studentTerm_info(APIView):
         IsAuthenticated,
     ]
     
-    def validate_auth(self, request, query):
+    def validate_auth(self, request):
         if  request.user.is_superuser or\
-            request.user.is_staff or\
-            query[0].student.user == request.user:
+            request.user.is_staff:
             return True
         else:
             return Response(
@@ -173,14 +172,22 @@ class show_studentTerm_info(APIView):
             )
 
 
-    def get(self, request: Request, student_id, term_id):
-            
+    def get(self, request: Request, term_id):
+        user = get_object_or_404(Student, user=request.user)
         selected_term = StudentTerm.objects.filter(
-            student_id=student_id, 
+            student_id=user.id, 
             term_id=term_id,
         )
 
-        if self.validate_auth(request, query=selected_term):
+        if not selected_term.exists():
+            return Response(
+                {
+                    "Not Found": "the user not found",
+                },
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+        if self.validate_auth(request):
             if selected_term.exists():
                 get_serialize = StudentTermSerializer(many=True, instance=selected_term)
                 return Response(data=get_serialize.data, status=status.HTTP_200_OK)
