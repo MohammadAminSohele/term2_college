@@ -200,6 +200,60 @@ class show_studentTerm_info(APIView):
             )
 
 
+class StudentReportCard(APIView):
+    """
+    get:
+        Returns student report card in one term.
+    """
+
+    permission_classes = [
+        IsAuthenticated,
+    ]
+    
+    def get(self, request: Request, term_id: int):
+        user = get_object_or_404(Student, user=request.user)
+        selected_term = StudentTerm.objects.filter(
+            student_id=user.id, 
+            term_id=term_id,
+        )
+
+        if not selected_term.exists():
+            return Response(
+                {
+                    "error": "The desired term not found",
+                },
+                status=status.HTTP_404_NOT_FOUND,
+            )
+        
+        context = {
+            "first name": request.user.first_name,
+            "last name": request.user.last_name,
+            "term name": selected_term[0].term.name,
+        }
+    
+        failes, grades, unit_course = {}, {}, {}
+        counter, sum, units = 0, 0, 0
+        for i in selected_term:
+            unit_course[i.course.name] = i.course.unit
+            units += i.course.unit
+            sum += (i.grade) * i.course.unit; counter += i.course.unit
+            grades[i.course.name] = i.grade
+            if i.grade < 10:
+                failes[i.course.name] = i.grade
+
+        context["grades"] = grades
+        context["failes"] = failes
+        context["average"] = sum / counter
+        context["sum"] = sum
+        context["units"] = units
+        context["unit course"] = unit_course
+
+        return Response(
+            data=context,
+            status=status.HTTP_200_OK,
+        )
+
+
 class delete_StudentTerm(mixins.DestroyModelMixin, generics.GenericAPIView):
     """
     delete:
