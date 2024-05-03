@@ -145,6 +145,13 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 25,
 }
 
+from datetime import timedelta
+
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=40),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
+    "ALGORITHM": "HS256",
+}
 
 SPECTACULAR_SETTINGS = {
     'TITLE': 'Term2 College',
