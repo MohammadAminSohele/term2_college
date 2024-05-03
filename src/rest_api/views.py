@@ -1,4 +1,5 @@
 from django.shortcuts import get_object_or_404
+from django.core.cache import cache
 
 from rest_framework.generics import (
     ListAPIView,
@@ -56,6 +57,10 @@ class show_students_info(ListAPIView):
     )
 
     def get_queryset(self):
+        query = cache.get('Students')
+        if query is None:
+            query = Student.objects.all()
+            cache.set('Students', query)
         return Student.objects.all()
 
 
@@ -320,7 +325,11 @@ class show_teachers_info(ListAPIView):
     )
 
     def get_queryset(self):
-        return Teacher.objects.all()
+        query = cache.get('Teachers')
+        if query is None:
+            query = Teacher.objects.all()
+            cache.set('Teachers', query)
+        return query
 
 
 class register_teacher(mixins.CreateModelMixin, generics.GenericAPIView):
@@ -395,4 +404,8 @@ class TeachersDegreeOfEducations(ListAPIView):
     ]
 
     def get_queryset(self):
-        return Teacher.objects.all()
+        query = cache.get('TeachersDegreeOfEducations')
+        if query is None:
+            query = Teacher.objects.all()
+            cache.set('TeachersDegreeOfEducations', query)
+        return query
