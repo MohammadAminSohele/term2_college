@@ -275,7 +275,7 @@ class register_student_term(mixins.CreateModelMixin, generics.GenericAPIView):
     post:
         Creates a new student term instance. Returns student term data.
 
-        parameters: exclude = [student]
+        parameters: exclude = [student, grade]
     """
 
     permission_classes = [
