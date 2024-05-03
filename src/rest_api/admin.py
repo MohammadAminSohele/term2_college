@@ -104,6 +104,7 @@ class CourseAdmin(admin.ModelAdmin):
     list_display = (
         "name",
         "level",
+        "unit",
         "regdate",
     )
     search_fields = (
@@ -124,9 +125,16 @@ class TermAdmin(admin.ModelAdmin):
 
 @admin.register(models.StudentTerm)
 class StudentTermAdmin(admin.ModelAdmin):
+
+    def get_unit(self, obj):
+        return obj.course.unit
+
+    get_unit.short_description = _('unit')
+
     list_display = (
         "student",
         "course",
+        "get_unit",
         "term",
         "regdate",
     )
