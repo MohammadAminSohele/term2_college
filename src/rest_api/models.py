@@ -14,13 +14,17 @@ class Student(models.Model):
     nat_code = models.CharField(
         max_length=10, verbose_name=_("Student's national code"),
         blank=False, null=False,
+        unique=True,
     )
     birthday_date = models.DateField(verbose_name=_("Date of birth"))
     telephone = models.CharField(max_length=11, verbose_name=_("landline number"))
     mobile_regex = RegexValidator(
         regex=r"^09\d{2}\s*?\d{3}\s*?\d{4}$", message=_("Invalid phone number."),
     )
-    mobile = models.CharField(max_length=11, verbose_name=_("Phone number"), validators=[mobile_regex], )
+    mobile = models.CharField(
+        max_length=11, verbose_name=_("Phone number"), 
+        validators=[mobile_regex], unique=True,
+    )
     regdate = models.DateField(verbose_name=_("Date of Registration"))
     description = models.TextField(verbose_name=_("Description"))
 
@@ -57,14 +61,19 @@ class Teacher(models.Model):
         on_delete=models.CASCADE, verbose_name=_("User"),
     )
     nat_code = models.CharField(
-        max_length=10, verbose_name=_("Teacher's national code")
+        max_length=10, verbose_name=_("Teacher's national code"),
+        null=False, blank=False,
+        unique=True,
     )
     birthday_date = models.DateField(verbose_name=_("Date of birth"))
     telephone = models.CharField(max_length=11, verbose_name=_("landline number"))
     mobile_regex = RegexValidator(
         regex=r"^09\d{2}\s*?\d{3}\s*?\d{4}$", message=_("Invalid phone number."),
     )
-    mobile = models.CharField(max_length=11, verbose_name=_("Phone number"))
+    mobile = models.CharField(
+        max_length=11, verbose_name=_("Phone number"),
+        validators=[mobile_regex], unique=True,
+    )
     field = models.ForeignKey(
         DegreeOfEducation, on_delete=models.CASCADE,
         verbose_name=_("Degree Of Education"),
