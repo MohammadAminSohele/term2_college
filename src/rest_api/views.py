@@ -19,6 +19,7 @@ from .serializer import (
     StudentTermRegisterSerializer,
     TeacherSerializer,
     TeacherRegisterEditSerializer,
+    TeacherDegreeOfEducationSerializer,
 )
 
 from permissions import (
@@ -312,6 +313,25 @@ class edit_teacher_info(UpdateAPIView):
         IsAdminUserOrUser,
     ]
     lookup_field = "pk"
+
+    def get_queryset(self):
+        return Teacher.objects.all()
+
+
+class TeachersDegreeOfEducations(ListAPIView):
+    """
+    get:
+        Returns all Teachers Degree Of Educations.
+    """
+
+    serializer_class = TeacherDegreeOfEducationSerializer
+    filterset_fields = [
+        "field",
+    ]
+    search_fields = [
+        "user__first_name",
+        "user__last_name",
+    ]
 
     def get_queryset(self):
         return Teacher.objects.all()
