@@ -1,4 +1,5 @@
 from django.shortcuts import get_object_or_404
+from django.core.cache import cache
 
 from rest_framework.generics import (
     ListAPIView,
@@ -56,6 +57,10 @@ class show_students_info(ListAPIView):
     )
 
     def get_queryset(self):
+        query = cache.get('Students')
+        if query is None:
+            query = Student.objects.all()
+            cache.set('Students', query)
         return Student.objects.all()
 
 
@@ -159,10 +164,9 @@ class show_studentTerm_info(APIView):
         IsAuthenticated,
     ]
     
-    def validate_auth(self, request, query):
+    def validate_auth(self, request):
         if  request.user.is_superuser or\
-            request.user.is_staff or\
-            query[0].student.user == request.user:
+            request.user.is_staff:
             return True
         else:
             return Response(
@@ -173,14 +177,22 @@ class show_studentTerm_info(APIView):
             )
 
 
-    def get(self, request: Request, student_id, term_id):
-            
+    def get(self, request: Request, term_id):
+        user = get_object_or_404(Student, user=request.user)
         selected_term = StudentTerm.objects.filter(
-            student_id=student_id, 
+            student_id=user.id, 
             term_id=term_id,
         )
 
-        if self.validate_auth(request, query=selected_term):
+        if not selected_term.exists():
+            return Response(
+                {
+                    "Not Found": "the user not found",
+                },
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+        if self.validate_auth(request):
             if selected_term.exists():
                 get_serialize = StudentTermSerializer(many=True, instance=selected_term)
                 return Response(data=get_serialize.data, status=status.HTTP_200_OK)
@@ -191,6 +203,60 @@ class show_studentTerm_info(APIView):
                 },
                 status=status.HTTP_404_NOT_FOUND,
             )
+
+
+class StudentReportCard(APIView):
+    """
+    get:
+        Returns student report card in one term.
+    """
+
+    permission_classes = [
+        IsAuthenticated,
+    ]
+    
+    def get(self, request: Request, term_id: int):
+        user = get_object_or_404(Student, user=request.user)
+        selected_term = StudentTerm.objects.filter(
+            student_id=user.id, 
+            term_id=term_id,
+        )
+
+        if not selected_term.exists():
+            return Response(
+                {
+                    "error": "The desired term not found",
+                },
+                status=status.HTTP_404_NOT_FOUND,
+            )
+        
+        context = {
+            "first name": request.user.first_name,
+            "last name": request.user.last_name,
+            "term name": selected_term[0].term.name,
+        }
+    
+        failes, grades, unit_course = {}, {}, {}
+        counter, sum, units = 0, 0, 0
+        for i in selected_term:
+            unit_course[i.course.name] = i.course.unit
+            units += i.course.unit
+            sum += (i.grade) * i.course.unit; counter += i.course.unit
+            grades[i.course.name] = i.grade
+            if i.grade < 10:
+                failes[i.course.name] = i.grade
+
+        context["grades"] = grades
+        context["failes"] = failes
+        context["average"] = sum / counter
+        context["sum"] = sum
+        context["units"] = units
+        context["unit course"] = unit_course
+
+        return Response(
+            data=context,
+            status=status.HTTP_200_OK,
+        )
 
 
 class delete_StudentTerm(mixins.DestroyModelMixin, generics.GenericAPIView):
@@ -214,7 +280,7 @@ class register_student_term(mixins.CreateModelMixin, generics.GenericAPIView):
     post:
         Creates a new student term instance. Returns student term data.
 
-        parameters: exclude = [student]
+        parameters: exclude = [student, grade]
     """
 
     permission_classes = [
@@ -259,7 +325,11 @@ class show_teachers_info(ListAPIView):
     )
 
     def get_queryset(self):
-        return Teacher.objects.all()
+        query = cache.get('Teachers')
+        if query is None:
+            query = Teacher.objects.all()
+            cache.set('Teachers', query)
+        return query
 
 
 class register_teacher(mixins.CreateModelMixin, generics.GenericAPIView):
@@ -334,4 +404,8 @@ class TeachersDegreeOfEducations(ListAPIView):
     ]
 
     def get_queryset(self):
-        return Teacher.objects.all()
+        query = cache.get('TeachersDegreeOfEducations')
+        if query is None:
+            query = Teacher.objects.all()
+            cache.set('TeachersDegreeOfEducations', query)
+        return query

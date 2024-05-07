@@ -368,7 +368,7 @@ paths:
         post:
             Creates a new student term instance. Returns student term data.
 
-            parameters: exclude = [student]
+            parameters: exclude = [student, grade]
       tags:
       - student
       requestBody:
@@ -393,6 +393,26 @@ paths:
               schema:
                 $ref: '#/components/schemas/StudentTermRegister'
           description: ''
+  /student/reportcard/{term_id}:
+    get:
+      operationId: student_reportcard_retrieve
+      description: |-
+        get:
+            Returns student report card in one term.
+      parameters:
+      - in: path
+        name: term_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - student
+      security:
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
   /student/show/{id}:
     get:
       operationId: student_show_retrieve
@@ -417,18 +437,13 @@ paths:
               schema:
                 $ref: '#/components/schemas/Student'
           description: ''
-  /student/show/term/{student_id}/{term_id}:
+  /student/show/term/{term_id}:
     get:
       operationId: student_show_term_retrieve
       description: |-
         get:
             Returns a list of student terms.
       parameters:
-      - in: path
-        name: student_id
-        schema:
-          type: integer
-        required: true
       - in: path
         name: term_id
         schema:
@@ -611,6 +626,48 @@ paths:
               schema:
                 $ref: '#/components/schemas/TeacherRegisterEdit'
           description: ''
+  /teachers/degreeOfeducations:
+    get:
+      operationId: teachers_degreeOfeducations_list
+      description: |-
+        get:
+            Returns all Teachers Degree Of Educations.
+      parameters:
+      - in: query
+        name: field
+        schema:
+          type: integer
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - teachers
+      security:
+      - cookieAuth: []
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedTeacherDegreeOfEducationList'
+          description: ''
   /teachers/show:
     get:
       operationId: teachers_show_list
@@ -678,6 +735,29 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Student'
+    PaginatedTeacherDegreeOfEducationList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/TeacherDegreeOfEducation'
     PaginatedTeacherList:
       type: object
       required:
@@ -722,6 +802,7 @@ components:
         mobile:
           type: string
           title: Phone number
+          pattern: ^09\d{2}\s*?\d{3}\s*?\d{4}$
           maxLength: 11
         regdate:
           type: string
@@ -819,6 +900,7 @@ components:
         mobile:
           type: string
           title: Phone number
+          pattern: ^09\d{2}\s*?\d{3}\s*?\d{4}$
           maxLength: 11
         regdate:
           type: string
@@ -837,6 +919,18 @@ components:
       - nat_code
       - regdate
       - telephone
+      - user
+    TeacherDegreeOfEducation:
+      type: object
+      properties:
+        user:
+          type: string
+          readOnly: true
+        field:
+          type: string
+          readOnly: true
+      required:
+      - field
       - user
     TeacherRegisterEdit:
       type: object
@@ -859,6 +953,7 @@ components:
         mobile:
           type: string
           title: Phone number
+          pattern: ^09\d{2}\s*?\d{3}\s*?\d{4}$
           maxLength: 11
         regdate:
           type: string

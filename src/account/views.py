@@ -34,11 +34,21 @@ class UserLogin(APIView):
 
         if serializer.is_valid():
 
-            user = get_user_model().objects.filter(username=serializer.data.get("username"))
+            user = get_user_model().objects.filter(
+                username=serializer.data.get("username"), 
+            )
             if not user.exists():
                 return Response(
                     {
-                        "error!": "User not found",
+                        "error": "user not found",
+                    },
+                    status=status.HTTP_404_NOT_FOUND,
+                )
+
+            if not user[0].check_password(serializer.data.get("password")):
+                return Response(
+                    {
+                        "error": "the username or password is wrong",
                     },
                     status=status.HTTP_404_NOT_FOUND,
                 )
@@ -98,14 +108,15 @@ class UserRegister(APIView):
                     status=status.HTTP_400_BAD_REQUEST,
                 )
             
-            get_user_model().objects.create(
+            user = get_user_model().objects.create(
                 username=serializer.data.get("username"),
-                password=serializer.data.get("password"),
                 first_name=serializer.data.get("first_name"),
                 last_name=serializer.data.get("last_name"),
                 email=serializer.data.get("email"),
             )
-            
+            user.set_password(serializer.data.get("password"))
+            user.save()
+
             return Response(
                 {
                     "Success": "the User is created",

@@ -1,4 +1,4 @@
-from django.core.validators import RegexValidator
+from django.core.validators import RegexValidator, ValidationError
 from django.utils.translation import gettext as _
 from django.contrib.auth import get_user_model
 from django.db import models
@@ -14,13 +14,17 @@ class Student(models.Model):
     nat_code = models.CharField(
         max_length=10, verbose_name=_("Student's national code"),
         blank=False, null=False,
+        unique=True,
     )
     birthday_date = models.DateField(verbose_name=_("Date of birth"))
     telephone = models.CharField(max_length=11, verbose_name=_("landline number"))
     mobile_regex = RegexValidator(
         regex=r"^09\d{2}\s*?\d{3}\s*?\d{4}$", message=_("Invalid phone number."),
     )
-    mobile = models.CharField(max_length=11, verbose_name=_("Phone number"), validators=[mobile_regex], )
+    mobile = models.CharField(
+        max_length=11, verbose_name=_("Phone number"), 
+        validators=[mobile_regex], unique=True,
+    )
     regdate = models.DateField(verbose_name=_("Date of Registration"))
     description = models.TextField(verbose_name=_("Description"))
 
@@ -57,14 +61,19 @@ class Teacher(models.Model):
         on_delete=models.CASCADE, verbose_name=_("User"),
     )
     nat_code = models.CharField(
-        max_length=10, verbose_name=_("Teacher's national code")
+        max_length=10, verbose_name=_("Teacher's national code"),
+        null=False, blank=False,
+        unique=True,
     )
     birthday_date = models.DateField(verbose_name=_("Date of birth"))
     telephone = models.CharField(max_length=11, verbose_name=_("landline number"))
     mobile_regex = RegexValidator(
         regex=r"^09\d{2}\s*?\d{3}\s*?\d{4}$", message=_("Invalid phone number."),
     )
-    mobile = models.CharField(max_length=11, verbose_name=_("Phone number"))
+    mobile = models.CharField(
+        max_length=11, verbose_name=_("Phone number"),
+        validators=[mobile_regex], unique=True,
+    )
     field = models.ForeignKey(
         DegreeOfEducation, on_delete=models.CASCADE,
         verbose_name=_("Degree Of Education"),
@@ -105,6 +114,9 @@ class Course(models.Model):
         Level, on_delete=models.CASCADE, 
         verbose_name=_("Section"), null=False,
     )
+    unit = models.PositiveSmallIntegerField(
+        default=1, verbose_name=_("unit"),
+    )
     regdate = models.DateField(verbose_name=_("Date of Registration"))
     description = models.TextField(verbose_name=_("Description"))
 
@@ -132,6 +144,12 @@ class Term(models.Model):
         verbose_name_plural = _("Terms")
 
 
+def validate_grade(value):
+    if value > 20:
+        raise ValidationError(_("The grade must be less than or equal to 20"))
+    return value
+
+
 class StudentTerm(models.Model):
     student = models.ForeignKey(
         Student, on_delete=models.CASCADE, verbose_name=_("Student")
@@ -140,6 +158,10 @@ class StudentTerm(models.Model):
         Course, on_delete=models.CASCADE, verbose_name=_("Course")
     )
     term = models.ForeignKey(Term, on_delete=models.CASCADE, verbose_name=_("Term"))
+    grade = models.PositiveSmallIntegerField(
+        default=0, blank=True,
+        verbose_name=_("student grade"), validators=[validate_grade,],
+    )
     regdate = models.DateField(verbose_name=_("Date of Registration"))
     description = models.TextField(verbose_name=_("Description"))
 
