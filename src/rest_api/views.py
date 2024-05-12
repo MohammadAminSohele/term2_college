@@ -1,5 +1,6 @@
 from django.shortcuts import get_object_or_404
 from django.core.cache import cache
+from django.utils import timezone
 
 from rest_framework.generics import (
     ListAPIView,
@@ -272,7 +273,15 @@ class delete_StudentTerm(mixins.DestroyModelMixin, generics.GenericAPIView):
     serializer_class = StudentTermSerializer
 
     def delete(self, request: Request, pk):
-        return self.destroy(request)
+        term = self.queryset.get(id=pk)
+        if term.endDate < timezone.now():
+            return self.destroy(request)
+        return Response(
+            {
+                "Error": "The deadline for selecting the unit has ended",
+            },
+            status=status.HTTP_406_NOT_ACCEPTABLE,
+        )
 
 
 class register_student_term(mixins.CreateModelMixin, generics.GenericAPIView):

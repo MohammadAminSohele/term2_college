@@ -163,6 +163,7 @@ class StudentTerm(models.Model):
         verbose_name=_("student grade"), validators=[validate_grade,],
     )
     regdate = models.DateField(verbose_name=_("Date of Registration"))
+    endDate = models.DateTimeField(verbose_name=_("End date"))
     description = models.TextField(verbose_name=_("Description"))
 
     def __str__(self):
