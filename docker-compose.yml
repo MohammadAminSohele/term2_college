@@ -1,0 +1,72 @@
+version: "5"
+
+services:
+  web:
+    build:
+      context: '.'
+      dockerfile: Dockerfile
+    container_name: "web"
+    restart: "always"
+    expose:
+     - 8000
+    depends_on:
+      - db
+    volumes:
+      - type : "bind"
+        source : './src/'
+        target : '/src'
+    networks:
+      - web_network
+      - nginx_network
+    env_file:
+      - "./.env"
+
+  db:
+    image: postgres:latest
+    restart: "always"
+    ports:
+      - "5432:5432"
+    container_name: "db"
+    networks:
+      - web_network
+    env_file:
+      - "./.env.db"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+  nginx:
+    build:
+      context: "./nginx/."
+      dockerfile: Dockerfile
+    restart: "always"
+    container_name: "nginx"
+    ports:
+      - "8000:80"
+    networks:
+      - nginx_network
+    volumes:
+      - type : "bind"
+        source : './src/static/'
+        target : '/src/static'
+
+      - type : "bind"
+        source : './src/media/'
+        target : '/src/media'
+
+      - type : "bind"
+        source : './src/log/'
+        target : '/src/log'
+
+    depends_on:
+      - web
+
+
+volumes:
+  db_data:
+    external: True
+
+networks:
+  nginx_network:
+    external: True
+  web_network:
+    external: True
